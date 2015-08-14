@@ -1,0 +1,16 @@
+{
+  "name": "BackgroundChart",
+  "version": "1.0.0",
+  "homepage": "https://github.com/wojciechAdaszynski/BackgroundChart",
+  "authors": [
+    "wojciech <wojciech.adaszynski@gmail.com>"
+  ],
+  "description": "BackgroundChart Library",
+  "main": "background-chart.js",
+  "keywords": [
+    "background",
+    "chart",
+    "svg"
+  ],
+  "license": "MIT"
+}
