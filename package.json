@@ -1,0 +1,29 @@
+{
+  "name": "BackgroundChart",
+  "version": "1.0.0",
+  "description": "BackgroundChart Library",
+  "main": "background-chart.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wojciechAdaszynski/BackgroundChart.git"
+  },
+  "keywords": [
+    "chart",
+    "background",
+    "svg"
+  ],
+  "author": "Wojciech Adaszynski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wojciechAdaszynski/BackgroundChart/issues"
+  },
+  "homepage": "https://github.com/wojciechAdaszynski/BackgroundChart",
+  "devDependencies": {
+    "karma": "^0.13.9",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-jasmine": "^0.2.2"
+  }
+}

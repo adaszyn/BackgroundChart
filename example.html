@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Example use of backgroundGraph</title>
+</head>
+<body>
+<div id="example1" style="width: 100%; height: 200px; border: 1px solid black;">
+</div>
+<script type="text/javascript" src="background-chart.js"></script>
+<script type="text/javascript">
+	var points = [];
+	for (var i = 0; i <= 2 * Math.PI; i += 0.1) {
+		points.push({
+			x: i,
+			y: Math.sin(i)
+		});
+	}
+	var p = [
+		{x: 0, y: 0},
+		{x: 1, y: 1},
+		{x: 2, y: 2},
+		{x: 3, y: 3},
+		{x: 4, y: 4},
+		{x: 5, y: 5},
+	];
+	var bb = new BackgroundChart('example1', {points: points});
+	bb.render();
+</script>
+</body>
+</html>
