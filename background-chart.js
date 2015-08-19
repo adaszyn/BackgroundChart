@@ -7,17 +7,18 @@ function BackgroundChart(id, args) {
 		container,
 		points;
 	container = document.getElementById(id);
-	if (!container) {
+	if ( !container ) {
 		throw new Error("Element does not exist");
 		return;
 	}
 	height = container.offsetHeight;
 	width = container.offsetWidth;
+	radius = this.radius;
 	transPoints = [];
 	
 
 	this.points = args.points || undefined;
-	this.style = args.style || {type: "line", fill: "none", opacity: 0.5, size: "1px"};
+	this.style = args.style || {type: "line", fill: "none", opacity: 0.5, radius: "1px"};
 	function recalculatePoints(points, fun) {
 		var arr = []; 
 		points.forEach(function(elem) {
@@ -25,41 +26,40 @@ function BackgroundChart(id, args) {
 		});
 		return arr;
 	}
-	function getChildFigures(points, type) {
-		switch (type) {
+	function getChildFigures(points, style) {
+		switch (style.type) {
 			case "line":
 				var pathString, path;
 				pathString = "M";
-				pathString += this.points[0].x + "," + this.points[0].y;
+				pathString += points[0].x + "," + points[0].y;
 				for ( var i = 1; i < points.length; i++ ) {
 					pathString += ("L" + points[i].x + "," + points[i].y);  
 				}
-				pathString += ("L" + this.points[0].x + "," + this.points[this.points.length - 1].y);
+				pathString += ("L" + points[0].x + "," + points[points.length - 1].y);
 				pathString += ("Z");
 				path = document.createElementNS(W3_SVG_URL, 'path'); 
-				// setting path styles
-				path.setAttributeNS(null, 'fill', 'black');
-				path.setAttributeNS(null, 'fill-opacity', '0');
-				path.setAttributeNS(null, 'stroke', 'black');
+
+				path.setAttributeNS(null, 'fill', style.color);
+				path.setAttributeNS(null, 'fill-opacity', style.opacity);
 				path.setAttributeNS(null, 'd', pathString);
 				return [path];
 			break;
-			case "dots":
+			case "points":
 				var circles = [], circle;
 				points.forEach(function(point) {
 					circle = document.createElementNS(W3_SVG_URL, 'circle');
+					circle.setAttributeNS(null, 'fill', style.color);
+					circle.setAttributeNS(null, 'fill-opacity', style.opacity);
 					circle.setAttributeNS(null, 'cx', point.x);
 					circle.setAttributeNS(null, 'cy', point.y);
 					circle.setAttributeNS(null, 'r', 5);
-					circle.setAttributeNS(null, 'stroke', 'black');
-					circle.setAttributeNS(null, 'stroke-width', '1');
 					circles.push(circle);
 				});
 				return circles;
 			break;
 		}
 	}
-	function drawChart(points, container, type) {
+	function drawChart(points, container, style) {
 		var svg, tempDiv, childFigures; 
 		if (container === null)
 			return;
@@ -70,7 +70,7 @@ function BackgroundChart(id, args) {
 		svg.setAttribute('height', '100%');
 		svg.setAttribute('preserveAspectRatio', 'none');
 		svg.setAttribute('viewBox', '0 0 ' + width + " " + height);
-		childFigures = getChildFigures(points, 'dots');
+		childFigures = getChildFigures(points, style);
 		console.log("childfigs", childFigures);
 		childFigures.forEach(function(elem) {
 			svg.appendChild(elem);			
@@ -85,7 +85,7 @@ function BackgroundChart(id, args) {
 		container.style.backgroundSize = "100% 100%";
 	}
 
-	function getTransformFunction(arr, width, height) {
+	function getTransformFunction(arr, width, height, radius) {
 		var minHeight, maxHeight, startDomain, endDomain, xDelta, yDelta;
 		maxValue = arr.reduce(function(p, v){
 			return (p.y > v.y ? p : v);
@@ -99,8 +99,8 @@ function BackgroundChart(id, args) {
 		endDomain = arr.reduce(function(p, v){
 			return (p.x > v.x ? p : v);
 		}).x;
-		xDelta = endDomain - startDomain;
-		yDelta = maxValue - minValue;
+		xDelta = endDomain - startDomain - radius;
+		yDelta = maxValue - minValue - radius;
 
 		return function(point){
 			var xStep, yStep;
@@ -113,9 +113,9 @@ function BackgroundChart(id, args) {
 		}	
 	}
 	this.render = function render() {
-		this.transFunction = getTransformFunction(this.points, width, height);
+		this.transFunction = getTransformFunction(this.points, width, height, this.style.radius);
 		transPoints = recalculatePoints(this.points, this.transFunction);
-		drawChart(transPoints, container);
+		drawChart(transPoints, container, this.style);
 	}
 
 }
